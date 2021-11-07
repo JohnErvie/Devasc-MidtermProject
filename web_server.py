@@ -21,6 +21,18 @@ def test():
 
     # show the form, it wasn't submitted
     return render_template('test.html')
+
+@webApp.route('/aboutus', methods=['GET', 'POST'])
+def aboutus():
+    if request.method == 'POST':
+        # do stuff when the form is submitted
+
+        # redirect to end the POST handling
+        # the redirect can be to the same route or somewhere else
+        return redirect(url_for('main'))
+
+    # show the form, it wasn't submitted
+    return render_template('aboutus.html')
     
 if __name__ == "__main__":
     webApp.run(host="127.0.0.1", port=8080)
