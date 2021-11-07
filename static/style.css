@@ -74,6 +74,22 @@ nav{
     color: #fff;
 }
 
+.signreg-btn{
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    border: 1px solid #fff;
+    padding: 6px 17px;
+    background: transparent;
+    position: relative;
+}
+
+.signreg-btn:hover{
+    border: 1px solid #3936f4;
+    background: #3936f4;
+    transition: 1s;
+}
+
 .hero-btn{
     display: inline-block;
     text-decoration: none;
@@ -89,3 +105,77 @@ nav{
     background: #3936f4;
     transition: 1s;
 }
+
+/*----- objective -----*/
+
+.objective{
+    width: 80%;
+    margin: auto;
+    text-align: center;
+    padding-top: 100px;
+}
+h1{
+    font-size: 36px;
+    font-weight: 600;
+}
+
+.row{
+    margin-top: 5%;
+    display: flex;
+    justify-content: space-between;
+}
+.objective-col{
+    flex-basis: 31%;
+    background: #fff3f3;
+    border-radius: 10px;
+    margin-bottom: 5%;
+    padding: 20px 12px;
+    box-sizing: border-box;
+    transition: 0.5;
+}
+img{
+    padding: 5px;
+    width: 110px;
+}
+.objective-col:hover{
+    box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.2);
+}
+
+/*----- Footer -----*/
+.footer{
+    width: 100%;
+    margin-top: 10%;
+    text-align: center;
+    padding-top: 30px 0;
+}
+h1{
+    font-size: 36px;
+    font-weight: 600;
+}
+.row{
+    margin-top: 5%;
+    display: flex;
+    justify-content: space-between;
+}
+.aboutus-col{
+    flex-basis: 31%;
+    background: #fff3f3;
+    border-radius: 10px;
+    margin-bottom: 5%;
+    padding: 20px 12px;
+    box-sizing: border-box;
+    transition: 0.5;
+}
+h3{
+    font-size: 20px;
+    font-weight: 600;
+}
+img{
+    padding: 5px;
+    width: 110px;
+    border-radius: 10px;
+}
+.aboutus-col:hover{
+    box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.2);
+}
+
