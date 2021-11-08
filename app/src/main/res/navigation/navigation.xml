@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_homeFragment_to_contactFragment"
             app:destination="@id/contactFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_objectivesFragment"
+            app:destination="@id/objectivesFragment" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
@@ -27,4 +30,8 @@
         android:name="com.example.devasc_midtermproj.ContactFragment"
         android:label="fragment_contact"
         tools:layout="@layout/fragment_contact" />
+    <fragment
+        android:id="@+id/objectivesFragment"
+        android:name="com.example.devasc_midtermproj.objectivesFragment"
+        android:label="objectivesFragment" />
 </navigation>

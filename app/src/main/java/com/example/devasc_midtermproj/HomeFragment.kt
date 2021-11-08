@@ -26,6 +26,9 @@ class HomeFragment : Fragment() {
         binding.contactBtn.setOnClickListener{ view : View ->
             view.findNavController().navigate(R.id.action_homeFragment_to_contactFragment)
         }
+        binding.btnLogin.setOnClickListener { view: View ->
+            view.findNavController().navigate(R.id.action_homeFragment_to_objectivesFragment)
+        }
 
         return binding.root
     }
