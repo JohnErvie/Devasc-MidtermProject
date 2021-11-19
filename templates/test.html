@@ -21,33 +21,38 @@
         </div>
     </div>
 <div class="container" id="container">
-	<div class="form-container sign-up-container">
-		<form action="#">
-			<h1>Create Account</h1>
-			<input type="text" placeholder="Name" />
-			<input type="email" placeholder="Email" />
-			<input type="password" placeholder="Password" />
-			<button>Sign Up</button>
-		</form>
-	</div>
 	<div class="form-container sign-in-container">
-		<form method="post">
+		<form action="{{ url_for('createdAcc') }}" method="POST">
 			<h1>Sign in</h1>
-			<input type="email" placeholder="Email" />
-			<input type="password" placeholder="Password" />
+			<input type="email" name="email_login" id="email_login" placeholder="Email" />
+			<input type="password" name="email_login" id="password_login" placeholder="Password" />
 			<a href="#">Forgot your password?</a>
 			
-			<button>Sign In</button>
-			
+			<button id="btn_signin">Sign In</button>
+			<br>
+			<br>
+			<a href="{{ url_for('register') }}" class="button">
+				Sign Up
+			</a>
+			</form>
 			
 		</form>
+		
 	</div>
 	<div class="overlay-container">
 		<div class="overlay">
 			<div class="overlay-panel overlay-right">
-				<h1>Sign Up Today!</h1>
-				<p>Connect your account to the device and mobile application</p>
-				<button class="ghost" id="signUp">Sign Up</button>
+				<div class="form-container sign-up-container"></div>
+				<form action="{{ url_for('createdAcc') }}" medthod="post"></form>
+					<h1>Sign Up Today!</h1>
+					<p>Connect your account to the device and mobile application</p>
+					<h1>Create Account</h1>
+					<input type="name" name="name_signup" id="name" placeholder="Name" />
+					<input type="email" name="email_signup" id="email" placeholder="Email" />
+					<input type="password" name="password_signup" id="password" placeholder="Password" />
+					<button class="ghost" id="signUp">Sign Up</button>
+				</form>
+				</div>
 			</div>
 		</div>
 	</div>
