@@ -41,10 +41,35 @@ customers_schema = CustomerSchema(many=True)
 def main():
     return render_template("index.html")
 
-@webApp.route('/test')
+@webApp.route('/test', methods=['GET'])
 def test():
+    
     # show the form, it wasn't submitted
     return render_template('test.html')
+
+@webApp.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form["email_login"]
+        password = request.form["pass_login"]
+
+        con = sql.connect("Customer.sqlite")
+        con.row_factory = sql.Row
+
+        cur = con.cursor()
+
+        cur.execute("select * from customer where customer_email='{}' and customer_password='{}';".format(email, password))
+
+        rows = cur.fetchone()
+
+        if (rows is None):
+            return render_template("test.html")
+        else:
+            if (len(rows) > 0):
+                return render_template("index.html", rows=rows)
+            
+
+    return render_template("test.html")
 
 @webApp.route('/aboutus', methods=['GET', 'POST'])
 def aboutus():

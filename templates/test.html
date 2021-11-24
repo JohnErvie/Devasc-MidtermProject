@@ -22,10 +22,10 @@
     </div>
 <div class="container" id="container">
 	<div class="form-container sign-in-container">
-		<form action="{{ url_for('createdAcc') }}" method="POST">
+		<form action="{{ url_for('login') }}" method="POST">
 			<h1>Sign in</h1>
 			<input type="email" name="email_login" id="email_login" placeholder="Email" />
-			<input type="password" name="email_login" id="password_login" placeholder="Password" />
+			<input type="password" name="pass_login" id="password_login" placeholder="Password" />
 			<a href="#">Forgot your password?</a>
 			
 			<button id="btn_signin">Sign In</button>
