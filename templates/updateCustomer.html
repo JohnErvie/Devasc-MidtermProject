@@ -7,24 +7,14 @@
     <title>Update Customer</title>
 </head>
 <body>
-    <h1>Update Customer</h1>
-    <input type="text" name="id_update" id="id_update" placeholder="id"/><br>
-    <input type="name" name="name_update" id="name_update" placeholder="Name"/><br>
-    <input type="email" name="email_update" id="email_update" placeholder="Email" /><br>
-    <input type="password" name="password_update" id="password_update" placeholder="Password" /><br><br>
-    <button type="button" onclick="updateCustomerInfo();">Update</button><br>
-    <a href="/customers">Go to Customers</a>
+    <form action="{{ url_for('update_customer') }}" method="POST">
+        <h1>Update Customer</h1>
+        <input type="text" name="id_update" id="id_update" placeholder="id"/><br>
+        <input type="name" name="name_update" placeholder="Name"/><br>
+        <input type="email" name="email_update" placeholder="Email" /><br>
+        <input type="password" name="password_update" placeholder="Password" /><br><br>
+        <input type="submit" value="Update" id="submit"><br>
+        <a href="/customers">Go to Customers</a>
+    </form>
 </body>
 </html>
-<script>
-    function updateCustomerInfo(){
-        var updateCusVal = document.getElementById("id_update").value;
-        if (updateCusVal.length > 0) {
-            fetch("/customers/updated", {method: 'put'}).then(response => response.json());
-            window.location.href="/customers";
-        }
-        else{
-            window.location.href="/customers";
-        }
-    }
-</script>
