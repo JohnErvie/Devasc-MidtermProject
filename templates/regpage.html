@@ -8,19 +8,18 @@
     <title>Registration</title>
 </head>
 <body>
-    <form action="#" method="post">
+    <form action="{{ url_for('createdAcc') }}" method="post">
         <h2>Sign Up</h2>
             <p>
-                  <label for="Name" class="floatLabel">Name</label>
-                  <input id="Name" name="Name" type="text">
+                  
+                  <input id="Name" name="name_signup" type="text" placeholder="Name">
               </p>
               <p>
-                  <label for="Email" class="floatLabel">Email</label>
-                  <input id="Email" name="Email" type="text">
+                  
+                  <input id="Email" name="email_signup" type="text" placeholder="Email">
               </p>
               <p>
-                  <label for="password" class="floatLabel">Password</label>
-                  <input id="password" name="password" type="password">
+                  <input id="password" name="password_signup" type="password" placeholder="Password">
                   <span>Enter a password longer than 8 characters</span>
               </p>
               <p>

@@ -41,10 +41,35 @@ customers_schema = CustomerSchema(many=True)
 def main():
     return render_template("index.html")
 
-@webApp.route('/test')
+@webApp.route('/test', methods=['GET'])
 def test():
+    
     # show the form, it wasn't submitted
     return render_template('test.html')
+
+@webApp.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form["email_login"]
+        password = request.form["pass_login"]
+
+        con = sql.connect("Customer.sqlite")
+        con.row_factory = sql.Row
+
+        cur = con.cursor()
+
+        cur.execute("select * from customer where customer_email='{}' and customer_password='{}';".format(email, password))
+
+        rows = cur.fetchone()
+
+        if (rows is None):
+            return render_template("test.html")
+        else:
+            if (len(rows) > 0):
+                return render_template("index.html", rows=rows)
+            
+
+    return render_template("test.html")
 
 @webApp.route('/aboutus', methods=['GET', 'POST'])
 def aboutus():
@@ -105,30 +130,34 @@ def delete_customer(customer_id):
     #print(result)
     return render_template('customers.html', rows=result)
 
-@webApp.route('/customers/updated', methods=['GET', 'PUT'])
-def update_customer():
-    if request.method == 'PUT':
-        customer_id = request.form['id_update']
-        customer_name = request.form['name_update']
-        customer_email = request.form['email_update']
-        customer_password = request.form['password_update']
-
-        with sql.connect(Customer.sqlite) as con:
-            cur = con.cursor()
-            cur.execute("UPDATE customer SET customer_name = '{}', customer_email = '{}', customer_password = '{}' WHERE customer_id = '{}'".format(customer_name,customer_email,customer_password,cust_id))
-            con.commit()
-            msg = "Successfully updated"
-        
-        customers = Customer.query.all()
-        result = customers_schema.dump(customers)
-        print(result)
-        return render_template('customers.html', rows=result)
-
-    return render_template('updateCustomer.html')
 
 @webApp.route('/customers/update')
-def update():
+def updatePage():
+    # show the form, it wasn't submitted
     return render_template('updateCustomer.html')
+
+@webApp.route('/update', methods=['GET', 'POST'])
+def update_customer():
+    if request.method == 'POST':
+        customer_id = request.form['id_update']
+        name = request.form['name_update']
+        email = request.form['email_update']
+        password = request.form['password_update']
+
+        con = sql.connect("Customer.sqlite")
+        con.execute("UPDATE customer set customer_name='{}', customer_email='{}', customer_password='{}' where customer_id='{}';".format(name, email, password, customer_id))
+        con.commit()
+        con.close()
+
+        customers = Customer.query.all()
+        result = customers_schema.dump(customers)
+        #print(result)
+        return render_template('customers.html', rows=result)
+
+    elif request.method == 'GET':
+        return render_template('updateCustomer.html')
     
+
+
 if __name__ == "__main__":
     webApp.run(host="0.0.0.0", port=8080, debug=True)

@@ -14,6 +14,11 @@
     <a href="{{ url_for('update_customer') }}">
         <button type="button" class="button">Update</button>
     </a>
+<body>
+    <input type="number" name="customer_id" id="customer_id" placeholder="customer ID" />
+    <button type="button" onclick="searchCustomer();">Search</button>
+    <button type="button" onclick="deleteCustomer();">Delete</button>
+    <button type="button" onclick="updateCustomer();">Update</button>
     <br>
     <br>
     <table border="1" class="tabol">
@@ -60,5 +65,9 @@
         else{
             window.location.href="/customers";
         }
+    }
+
+    function updateCustomer(){
+        window.location.href="/update";
     }
 </script>
