@@ -8,6 +8,8 @@ import json, os
 import sqlite3 as sql
 from datetime import datetime
 
+user = None
+
 
 webApp = Flask(__name__)
 webApp.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Customer.sqlite'
@@ -36,16 +38,26 @@ class CustomerSchema(ma.Schema):
 customer_schema = CustomerSchema()
 customers_schema = CustomerSchema(many=True)
 
-
 @webApp.route("/")
 def main():
-    return render_template("index.html")
+    if(user is None):
+        return redirect(url_for("test"))
+    else:
+        return redirect(url_for("home"))
 
 @webApp.route('/test', methods=['GET'])
 def test():
-    
-    # show the form, it wasn't submitted
-    return render_template('test.html')
+    global user
+    if(user is None):
+        # show the form, it wasn't submitted
+        return render_template('test.html')
+    else:
+        user = None
+        return render_template('test.html')
+
+@webApp.route("/home")
+def home():
+    return render_template('index.html')
 
 @webApp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -60,13 +72,14 @@ def login():
 
         cur.execute("select * from customer where customer_email='{}' and customer_password='{}';".format(email, password))
 
-        rows = cur.fetchone()
+        global user
+        user = cur.fetchone()
 
-        if (rows is None):
+        if (user is None):
             return render_template("test.html")
         else:
-            if (len(rows) > 0):
-                return render_template("index.html", rows=rows)
+            if (len(user) > 0):
+                return redirect(url_for("home"))
             
 
     return render_template("test.html")
@@ -98,9 +111,8 @@ def createdAcc():
         new_customer = Customer(customer_id, customer_name, customer_email, customer_password)
         db.session.add(new_customer)
         db.session.commit()
-        customer_schema.jsonify(new_customer)
         
-        return render_template('test.html')
+        return redirect(url_for('test'))
 
 @webApp.route('/customers', methods=['GET'])
 def customers():
