@@ -13,44 +13,28 @@
         <div class="bitconnect">
             <nav>
                 <ul class="primary-nav">
-                    <li class="current"><a href="{{ url_for('main') }}">Home</a></li>
-                    <li><a href="#">Device Description</a></li>
-                    <li><a href="{{ url_for('aboutus') }}">About Us</a></li>
+
+                    <li><a href="#"><button type="button" class="botton">Device Description</a></li>
+                    <li><a href="{{ url_for('aboutus') }}"><button type="button" class="botton">About Us</a></li>
                 </ul>
             </nav>
         </div>
     </div>
 <div class="container" id="container">
-	<div class="form-container sign-up-container">
-		<form action="#">
-			<h1>Create Account</h1>
-			<input type="text" placeholder="Name" />
-			<input type="email" placeholder="Email" />
-			<input type="password" placeholder="Password" />
-			<button>Sign Up</button>
-		</form>
-	</div>
-	<div class="form-container sign-in-container">
-		<form method="post">
-			<h1>Sign in</h1>
-			<input type="email" placeholder="Email" />
-			<input type="password" placeholder="Password" />
-			<a href="#">Forgot your password?</a>
-			
-			<button>Sign In</button>
-			
-			
-		</form>
-	</div>
-	<div class="overlay-container">
-		<div class="overlay">
-			<div class="overlay-panel overlay-right">
-				<h1>Sign Up Today!</h1>
-				<p>Connect your account to the device and mobile application</p>
-				<button class="ghost" id="signUp">Sign Up</button>
-			</div>
-		</div>
-	</div>
+    <div class="form-container sign-in-container">
+        <form action="{{ url_for('login') }}" method="POST">
+            <h1>Sign in</h1>
+            <input type="email" name="email_login" id="email_login" placeholder="Email" />
+            <input type="password" name="pass_login" id="password_login" placeholder="Password" />
+            <a href="#">Forgot your password?</a>
+
+            <button id="btn_signin">Sign In</button>
+            <br>
+            <br>
+            <a href="{{ url_for('register') }}" class="button">
+                Sign Up
+            </a>
+        </form>
+    </div>
 </div>
-</dy>
 </html>
