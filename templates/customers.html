@@ -5,18 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Members</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='customer.css') }}">
 </head>
-<body>
-    <input type="number" name="customer_id" id="customer_id" placeholder="customer ID" />
-    <button type="button" onclick="searchCustomer();">Search</button>
-    <button type="button" onclick="deleteCustomer();">Delete</button>
-    <a href="{{ url_for('update_customer') }}" class="button">
-        Update
+<center><body>
+    <input type="number" name="customer_id" id="customer_id" placeholder="Customer ID" />
+    <button type="button" onclick="searchCustomer();" class="button">Search</button>
+    <button type="button" onclick="deleteCustomer();" class="button">Delete</button>
+    <a href="{{ url_for('update_customer') }}">
+        <button type="button" class="button">Update</button>
     </a>
     <br>
     <br>
-    <table border="1">
-        <thead>
+    <table border="1" class="tabol">
+        <thead class="Thead">
             <td>ID</td>
             <td>Name</td>
             <td>Email</td>
@@ -31,8 +32,9 @@
 
         {% endfor %}
     </table>
-    <a href="/">Go to Home Page</a>
+    <a href="/"><button type="button" class="button">Go Home</button></a>
 </body>
+</center>
 </html>
 <script>
     function searchCustomer(){

@@ -55,6 +55,14 @@ button{
 	text-transform: uppercase;
 	transition: transform 80ms ease-in;
 }
+botton {
+	transition-duration: 0.4s;
+  }
+  
+  .botton:hover {
+	background-color: white; /* Green */
+	color: white;
+  }
 
 button:active{
 	transform: scale(0.95);
