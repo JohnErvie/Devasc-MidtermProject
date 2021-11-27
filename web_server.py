@@ -7,6 +7,7 @@ from flask_marshmallow import Marshmallow
 import json, os
 import sqlite3 as sql
 from datetime import datetime
+from sqlalchemy import text
 
 user = None
 
@@ -57,7 +58,8 @@ def test():
 
 @webApp.route("/home")
 def home():
-    return render_template('index.html')
+    global user
+    return render_template('index.html', user=user)
 
 @webApp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -65,23 +67,25 @@ def login():
         email = request.form["email_login"]
         password = request.form["pass_login"]
 
-        con = sql.connect("Customer.sqlite")
-        con.row_factory = sql.Row
-
-        cur = con.cursor()
-
-        cur.execute("select * from customer where customer_email='{}' and customer_password='{}';".format(email, password))
-
         global user
-        user = cur.fetchone()
-
+        stmt = text("SELECT * FROM customer where customer_email=:email and customer_password=:password")
+        stmt = stmt.columns(Customer.customer_id, Customer.customer_name, Customer.customer_email, Customer.customer_password)
+        
+        customers = db.session.query(Customer).from_statement(stmt).params(email=email, password=password).all()
+        user = customers_schema.dump(customers)
+        #print(result)
+        #customer_schema.jsonify(result)
+        
         if (user is None):
+            user = None
             return render_template("test.html")
         else:
-            if (len(user) > 0):
-                return redirect(url_for("home"))
-            
-
+            if(len(user)>0):
+                if (user[0]['customer_email'] == email and user[0]['customer_password'] == password):
+                    return redirect(url_for("home")) 
+                else:
+                    return render_template("test.html")
+        
     return render_template("test.html")
 
 @webApp.route('/aboutus', methods=['GET', 'POST'])
@@ -119,7 +123,8 @@ def customers():
     customers = Customer.query.all()
     result = customers_schema.dump(customers)
     #print(result)
-    return render_template('customers.html', rows=result)
+    global user
+    return render_template('customers.html', rows=result, user=user)
 
 @webApp.route('/customers/<customer_id>', methods=['GET'])
 def read_customer(customer_id):
@@ -128,7 +133,8 @@ def read_customer(customer_id):
     result.append(customer_schema.dump(customer))
     #print(result)
     #customer_schema.jsonify(result)
-    return render_template('customers.html', rows=result)
+    global user
+    return render_template('customers.html', rows=result, user=user)
 
 
 @webApp.route('/customers/delete/<customer_id>', methods=['DELETE'])
@@ -140,36 +146,43 @@ def delete_customer(customer_id):
     customers = Customer.query.all()
     result = customers_schema.dump(customers)
     #print(result)
-    return render_template('customers.html', rows=result)
+    global user
+    return render_template('customers.html', rows=result, user=user)
 
 
-@webApp.route('/customers/update')
-def updatePage():
+@webApp.route('/update/<customer_id>')
+def updatePage(customer_id):
+    global user
     # show the form, it wasn't submitted
-    return render_template('updateCustomer.html')
+    return render_template('updateCustomer.html', user=user)
 
 @webApp.route('/update', methods=['GET', 'POST'])
 def update_customer():
+    global user
     if request.method == 'POST':
-        customer_id = request.form['id_update']
+        customer = Customer.query.get(user[0]['customer_id'])
         name = request.form['name_update']
         email = request.form['email_update']
         password = request.form['password_update']
 
-        con = sql.connect("Customer.sqlite")
-        con.execute("UPDATE customer set customer_name='{}', customer_email='{}', customer_password='{}' where customer_id='{}';".format(name, email, password, customer_id))
-        con.commit()
-        con.close()
+        customer.customer_name = name
+        customer.customer_email = email
+        customer.customer_password = password
+
+        db.session.commit()
 
         customers = Customer.query.all()
         result = customers_schema.dump(customers)
         #print(result)
-        return render_template('customers.html', rows=result)
+        return render_template('customers.html', rows=result, user=user)
 
     elif request.method == 'GET':
-        return render_template('updateCustomer.html')
+        return render_template('updateCustomer.html', user=user)
+
+    return render_template('updateCustomer.html', user=user)
     
 
 
 if __name__ == "__main__":
+    db.create_all()
     webApp.run(host="0.0.0.0", port=8080, debug=True)
