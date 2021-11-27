@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='customer.css') }}">
+</head>
+<center><body>
+    <input type="number" name="customer_id" id="customer_id" placeholder="Customer ID" />
+    <button type="button" onclick="searchCustomer();" class="button">Search</button>
+    <button type="button" onclick="deleteCustomer();" class="button">Delete</button>
+    
+    <br>
+    <br>
+    <table border="1" class="tabol">
+        <thead class="Thead">
+            <td>ID</td>
+            <td>Name</td>
+            <td>Email</td>
+        </thead>
+
+        {% for row in rows %}
+        <tr>
+            <td>{{row['customer_id']}}</td>
+            <td>{{row['customer_name']}}</td>
+            <td>{{row['customer_email']}}</td>
+        </tr>
+
+        {% endfor %}
+    </table>
+    <a href="/"><button type="button" class="button">Go Home</button></a>
+</body>
+</center>
+</html>
+<script>
+    function searchCustomer(){
+        // Selecting the input element and get its value 
+        var inputVal = document.getElementById("customer_id").value;
+        if (inputVal.length > 0) {
+            window.location.href="/customers/"+inputVal;
+        }
+        else{
+            window.location.href="/customers";
+        }
+        
+        // Displaying the value
+        //alert(inputVal);
+    }
+
+    function deleteCustomer(){
+        var cusIdVal = document.getElementById("customer_id").value;
+        if (cusIdVal.length > 0) {
+            fetch("/customers/delete/"+cusIdVal, {method: 'delete'}).then(response => response.json());
+            window.location.href="/customers";
+        }
+        else{
+            window.location.href="/customers";
+        }
+    }
+
+    function updateCustomer(){
+        var update_userid = '{{ user[0] }}'
+        window.location.href="/update/"+update_userid;
+        
+    }
+</script>
