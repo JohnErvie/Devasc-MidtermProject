@@ -18,7 +18,7 @@
                     <li><a href="{{ url_for('aboutus') }}">ABOUT</a>></a></li>
                     <li><a href="">CONTACT</a>></a></li>
                     <li><a href="{{ url_for('customers') }}">Active Members</a>></a></li>
-                    <a href="{{ url_for('update_customer') }}" class="signreg-btn">Profile</a>
+                    <a href="{{ url_for('updatePage', customer_id=user[0]["customer_id"]) }}" class="signreg-btn">Profile</a>
                 </ul>
             </div>
         </nav>

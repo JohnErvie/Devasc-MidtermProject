@@ -59,7 +59,10 @@ def test():
 @webApp.route("/home")
 def home():
     global user
-    return render_template('index.html', user=user)
+    if(user is None):
+        return redirect(url_for("test"))
+    else:
+        return render_template('index.html', user=user)
 
 @webApp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -78,15 +81,16 @@ def login():
         
         if (user is None):
             user = None
-            return render_template("test.html")
+            return redirect(url_for("test"))
         else:
             if(len(user)>0):
                 if (user[0]['customer_email'] == email and user[0]['customer_password'] == password):
                     return redirect(url_for("home")) 
                 else:
-                    return render_template("test.html")
+                    user = None
+                    return redirect(url_for("test"))
         
-    return render_template("test.html")
+    return redirect(url_for("test"))
 
 @webApp.route('/aboutus', methods=['GET', 'POST'])
 def aboutus():
@@ -150,17 +154,19 @@ def delete_customer(customer_id):
     return render_template('customers.html', rows=result, user=user)
 
 
-@webApp.route('/update/<customer_id>')
+@webApp.route('/update/<customer_id>', methods=['GET', 'PUT'])
 def updatePage(customer_id):
     global user
     # show the form, it wasn't submitted
+    
+
     return render_template('updateCustomer.html', user=user)
 
-@webApp.route('/update', methods=['GET', 'POST'])
-def update_customer():
+@webApp.route('/updated/<customer_id>', methods=['GET', 'PUT'])
+def update_customer(customer_id):
     global user
-    if request.method == 'POST':
-        customer = Customer.query.get(user[0]['customer_id'])
+    if request.method == 'PUT':
+        customer = Customer.query.get(customer_id)
         name = request.form['name_update']
         email = request.form['email_update']
         password = request.form['password_update']
@@ -169,11 +175,13 @@ def update_customer():
         customer.customer_email = email
         customer.customer_password = password
 
+
         db.session.commit()
 
         customers = Customer.query.all()
         result = customers_schema.dump(customers)
         #print(result)
+
         return render_template('customers.html', rows=result, user=user)
 
     elif request.method == 'GET':
