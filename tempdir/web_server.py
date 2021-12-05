@@ -143,13 +143,14 @@ def read_customer(customer_id):
 
 @webApp.route('/customers/delete/<customer_id>', methods=['DELETE'])
 def delete_customer(customer_id):
-    customer = Customer.query.get(customer_id)
-    db.session.delete(customer)
-    db.session.commit()
+    if request.method == 'DELETE':
+        customer = Customer.query.get(customer_id)
+        db.session.delete(customer)
+        db.session.commit()
 
-    customers = Customer.query.all()
-    result = customers_schema.dump(customers)
-    #print(result)
+        customers = Customer.query.all()
+        result = customers_schema.dump(customers)
+        #print(result)
     global user
     return render_template('customers.html', rows=result, user=user)
 
