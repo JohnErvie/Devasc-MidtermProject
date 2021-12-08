@@ -30,7 +30,7 @@
 
 <script>
     function updateCustomer(){
-        var update_userid = '{{ user[0]["customer_id"] }}'
+        var update_userid = '{{ user["customer_id"] }}'
         const data = new FormData(document.getElementById("updateForm"));
         
         fetch("/updated/"+update_userid, {body: data, method: 'PUT'}).then(response => response.json());
@@ -39,12 +39,12 @@
 </script>
 
 <script type="text/javascript">
-    var user_id ='{{ user[0]["customer_id"] }}'
+    var user_id ='{{ user["customer_id"] }}'
     document.getElementById("id_update").value = user_id;
 
-    var user_name ='{{ user[0]["customer_name"] }}'
+    var user_name ='{{ user["customer_name"] }}'
     document.getElementById("name_update").value = user_name;
 
-    var user_email ='{{ user[0]["customer_email"] }}'
+    var user_email ='{{ user["customer_email"] }}'
     document.getElementById("email_update").value = user_email;
  </script>

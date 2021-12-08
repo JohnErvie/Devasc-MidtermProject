@@ -14,6 +14,7 @@ user = None
 
 webApp = Flask(__name__)
 webApp.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Customer.sqlite'
+webApp.config['SECRET_KEY'] = 'group3'
 webApp.config['SQLALCHEMY_TRACK_MODIFICATION'] = True
 db = SQLAlchemy(webApp)
 ma = Marshmallow(webApp)
@@ -71,11 +72,9 @@ def login():
         password = request.form["pass_login"]
 
         global user
-        stmt = text("SELECT * FROM customer where customer_email=:email and customer_password=:password")
-        stmt = stmt.columns(Customer.customer_id, Customer.customer_name, Customer.customer_email, Customer.customer_password)
-        
-        customers = db.session.query(Customer).from_statement(stmt).params(email=email, password=password).all()
-        user = customers_schema.dump(customers)
+        customer = Customer.query.filter_by(customer_email=email, customer_password=password).first()
+        user = customer_schema.dump(customer)
+        print(user)
         #print(result)
         #customer_schema.jsonify(result)
         
@@ -84,7 +83,7 @@ def login():
             return redirect(url_for("test"))
         else:
             if(len(user)>0):
-                if (user[0]['customer_email'] == email and user[0]['customer_password'] == password):
+                if (user['customer_password'] == password):
                     return redirect(url_for("home")) 
                 else:
                     user = None
