@@ -14,7 +14,6 @@ user = None
 
 webApp = Flask(__name__)
 webApp.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Customer.sqlite'
-webApp.config['SECRET_KEY'] = 'group3'
 webApp.config['SQLALCHEMY_TRACK_MODIFICATION'] = True
 db = SQLAlchemy(webApp)
 ma = Marshmallow(webApp)
@@ -68,7 +67,7 @@ def home():
 @webApp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form["email_login"]
+        email = request.get_json["email_login"]
         password = request.form["pass_login"]
 
         global user
@@ -111,15 +110,28 @@ def register():
 @webApp.route('/createdAcc', methods=['GET', 'POST'])
 def createdAcc():
     if request.method == 'POST':
-        customer_id = datetime.now().strftime("%Y%m%d%H%M%S")
-        customer_name = request.form["name_signup"]
-        customer_email = request.form['email_signup']
-        customer_password = request.form['password_signup']
-        new_customer = Customer(customer_id, customer_name, customer_email, customer_password)
-        db.session.add(new_customer)
-        db.session.commit()
+        data = request.get_json()
+        #print(data)
         
-        return redirect(url_for('test'))
+        customer_id = datetime.now().strftime("%Y%m%d%H%M%S")
+        customer_name = data[0]['name']
+        customer_email = data[0]['email']
+        customer_password = data[0]['password']
+
+        check_email = Customer.query.filter_by(customer_email=customer_email).first()
+        existing_email = customer_schema.dump(check_email)
+        print(len(existing_email))
+        if len(existing_email) > 0:
+            message = {'message':"Email is already used"}
+
+        else:
+            new_customer = Customer(customer_id, customer_name, customer_email, customer_password)
+            db.session.add(new_customer)
+            db.session.commit()
+
+            message = {'message':"Successfully Registered"}
+        
+        return jsonify(message)
 
 @webApp.route('/customers', methods=['GET'])
 def customers():
