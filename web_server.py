@@ -50,7 +50,6 @@ def main():
 def test():
     global user
     if(user is None):
-        # show the form, it wasn't submitted
         return render_template('test.html')
     else:
         user = None
@@ -64,31 +63,32 @@ def home():
     else:
         return render_template('index.html', user=user)
 
-@webApp.route('/login', methods=['GET', 'POST'])
-def login():
+@webApp.route('/login/<customer_email>', methods=['GET', 'POST'])
+def login(customer_email):
     if request.method == 'POST':
-        email = request.get_json["email_login"]
-        password = request.form["pass_login"]
+        data = request.get_json()
+        email = customer_email
+        password = data[0]["password"]
 
         global user
-        customer = Customer.query.filter_by(customer_email=email, customer_password=password).first()
+        customer = Customer.query.filter_by(customer_email=email).first()
         user = customer_schema.dump(customer)
         print(user)
         #print(result)
         #customer_schema.jsonify(result)
+        message = ""
+    
+        if(len(user)>0):
+            if (user['customer_password'] == password):
+                #return redirect(url_for("home")) 
+                message = {'message':"Welcome"}
+
+            else:
+                user = None
+                message = {'message':"Incorrect Email or Password"}
+                #return redirect(url_for("test"))
         
-        if (user is None):
-            user = None
-            return redirect(url_for("test"))
-        else:
-            if(len(user)>0):
-                if (user['customer_password'] == password):
-                    return redirect(url_for("home")) 
-                else:
-                    user = None
-                    return redirect(url_for("test"))
-        
-    return redirect(url_for("test"))
+    return jsonify(message)
 
 @webApp.route('/aboutus', methods=['GET', 'POST'])
 def aboutus():
@@ -135,11 +135,17 @@ def createdAcc():
 
 @webApp.route('/customers', methods=['GET'])
 def customers():
-    customers = Customer.query.all()
-    result = customers_schema.dump(customers)
-    #print(result)
     global user
-    return render_template('customers.html', rows=result, user=user)
+    if(user is None):
+        return redirect(url_for("test"))
+    else:
+        customers = Customer.query.all()
+        result = customers_schema.dump(customers)
+        #print(result)
+        
+        return render_template('customers.html', rows=result, user=user)
+
+    
 
 @webApp.route('/customers/<customer_id>', methods=['GET'])
 def read_customer(customer_id):
