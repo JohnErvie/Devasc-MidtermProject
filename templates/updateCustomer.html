@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Update Customer</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='design.css') }}">
 
@@ -13,7 +14,6 @@
 
 
 <body>
-    <form id="updateForm">
         <h1>Update Customer</h1>
         <input type="text" name="id_update" id="id_update" value="" readonly/><br>
         <input type="name" name="name_update" id="name_update" placeholder="Name"/><br>
@@ -22,7 +22,6 @@
         <button type="button" onclick="updateCustomer();" class="button">Update</button><br>
         <a href="/test"> <button type="button" >Logout</button><br></a>
         <a href="/customers"> <button type="button" >Go to Customer</button><br></a>
-    </form>
 
 </body>
 </center>
@@ -30,12 +29,35 @@
 
 <script>
     function updateCustomer(){
-        var update_userid = '{{ user["customer_id"] }}'
-        const data = new FormData(document.getElementById("updateForm"));
-        
-        fetch("/updated/"+update_userid, {body: data, method: 'PUT'}).then(response => response.json());
-        window.location.href="/test";
+        var update_userid = '{{ user["customer_id"] }}';
+        var customer_name = document.getElementById("name_update").value;
+        var customer_email = document.getElementById("email_update").value;
+        var customer_password = document.getElementById("password_update").value;
+
+        var data = [
+            {"name": customer_name,
+            "email": customer_password,
+            "password": customer_password}
+        ];
+
+        $.ajax({
+        type: "PUT",
+        url: "/updated/"+update_userid,
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        dataType: 'json',
+        success: function(result) {
+            message = result.message;
+            console.log(message);
+            if(message == "User Updated"){
+                window.location.href="/test";
+           }
+        } 
+        });   
     }
+
+
+
 </script>
 
 <script type="text/javascript">

@@ -73,7 +73,7 @@ def login(customer_email):
         global user
         customer = Customer.query.filter_by(customer_email=email).first()
         user = customer_schema.dump(customer)
-        print(user)
+        #print(user)
         #print(result)
         #customer_schema.jsonify(result)
         message = ""
@@ -178,9 +178,6 @@ def delete_customer(customer_id):
 @webApp.route('/update/<customer_id>', methods=['GET', 'PUT'])
 def updatePage(customer_id):
     global user
-    # show the form, it wasn't submitted
-    
-
     return render_template('updateCustomer.html', user=user)
 
 @webApp.route('/updated/<customer_id>', methods=['GET', 'PUT'])
@@ -188,9 +185,11 @@ def update_customer(customer_id):
     global user
     if request.method == 'PUT':
         customer = Customer.query.get(customer_id)
-        name = request.form['name_update']
-        email = request.form['email_update']
-        password = request.form['password_update']
+        data = request.get_json()
+
+        name = data[0]['name']
+        email = data[0]['email']
+        password = data[0]['password']
 
         customer.customer_name = name
         customer.customer_email = email
@@ -201,14 +200,10 @@ def update_customer(customer_id):
 
         customers = Customer.query.all()
         result = customers_schema.dump(customers)
-        #print(result)
 
-        return render_template('customers.html', rows=result, user=user)
+        message = {'message':"User Updated"}
 
-    elif request.method == 'GET':
-        return render_template('updateCustomer.html', user=user)
-
-    return render_template('updateCustomer.html', user=user)
+    return jsonify(message)
     
 
 

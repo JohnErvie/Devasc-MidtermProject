@@ -33,6 +33,8 @@
             <input type="password" name="pass_login" id="Password" placeholder="Password" />
             <br>
             <br>
+            <span style="color:red" id="error"></span>
+            <br><br><br>
             <a href="#">Forgot your password?</a>
             <br>
             <br>
@@ -51,6 +53,7 @@
         var message;
         var customer_email = document.getElementById("Email").value;
         var customer_password = document.getElementById("Password").value;
+        var error = document.getElementById("error");
 
         var data = [
             {"password": customer_password}
@@ -64,12 +67,12 @@
         dataType: 'json',
         success: function(result) {
             message = result.message;
-            console.log(message);
+            //console.log(message);
             if(message == "Welcome"){
                 window.location.href="/home";
            }
            else{
-            window.location.href="/test";
+            error.innerHTML = message;
            }
         } 
         });   
