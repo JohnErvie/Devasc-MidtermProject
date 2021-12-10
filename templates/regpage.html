@@ -38,13 +38,12 @@
 
         var data = [
             {"name": customer_name,
-            "email": customer_email,
             "password": customer_password}
         ];
 
         $.ajax({
         type: "POST",
-        url: "/createdAcc",
+        url: "/createdAcc/"+customer_email,
         data: JSON.stringify(data),
         contentType: "application/json",
         dataType: 'json',

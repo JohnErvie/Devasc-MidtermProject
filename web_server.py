@@ -107,15 +107,14 @@ def register():
     # show the form, it wasn't submitted
     return render_template('regpage.html')
 
-@webApp.route('/createdAcc', methods=['GET', 'POST'])
-def createdAcc():
+@webApp.route('/createdAcc/<customer_email>', methods=['GET', 'POST'])
+def createdAcc(customer_email):
     if request.method == 'POST':
         data = request.get_json()
         #print(data)
         
         customer_id = datetime.now().strftime("%Y%m%d%H%M%S")
         customer_name = data[0]['name']
-        customer_email = data[0]['email']
         customer_password = data[0]['password']
 
         check_email = Customer.query.filter_by(customer_email=customer_email).first()
