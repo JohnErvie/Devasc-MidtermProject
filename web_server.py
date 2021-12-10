@@ -87,6 +87,10 @@ def login(customer_email):
                 user = None
                 message = {'message':"Incorrect Email or Password"}
                 #return redirect(url_for("test"))
+        else:
+            user = None
+            message = {'message':"There is no email registered"}
+            #return redirect(url_for("test"))
         
     return jsonify(message)
 
