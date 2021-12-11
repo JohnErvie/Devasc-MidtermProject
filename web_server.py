@@ -123,7 +123,7 @@ def createdAcc(customer_email):
 
         check_email = Customer.query.filter_by(customer_email=customer_email).first()
         existing_email = customer_schema.dump(check_email)
-        print(len(existing_email))
+        #print(len(existing_email))
         if len(existing_email) > 0:
             message = {'message':"Email is already used"}
 
@@ -191,17 +191,35 @@ def update_customer(customer_id):
         email = data[0]['email']
         password = data[0]['password']
 
-        customer.customer_name = name
-        customer.customer_email = email
-        customer.customer_password = password
+        check_email = Customer.query.filter_by(customer_email=email).first()
+        existing_email = customer_schema.dump(check_email)
+
+        if user['customer_email'] == email:
+            customer.customer_name = name
+            customer.customer_email = email
+            customer.customer_password = password
 
 
-        db.session.commit()
+            db.session.commit()
 
-        customers = Customer.query.all()
-        result = customers_schema.dump(customers)
+            customers = Customer.query.all()
+            result = customers_schema.dump(customers)
 
-        message = {'message':"User Updated"}
+            message = {'message':"User Updated"}
+        else:
+            if len(existing_email) > 0:
+                message = {'message':"Email is already used"}
+            else:
+                customer.customer_name = name
+                customer.customer_email = email
+                customer.customer_password = password
+
+                db.session.commit()
+
+                customers = Customer.query.all()
+                result = customers_schema.dump(customers)
+
+                message = {'message':"User Updated"}
 
     return jsonify(message)
     
