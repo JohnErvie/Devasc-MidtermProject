@@ -56,16 +56,18 @@
         var error = document.getElementById("error");
 
         var data = [
-            {"password": customer_password}
+            {"email": customer_email,
+            "password": customer_password}
         ];
 
         $.ajax({
         type: "POST",
-        url: "/login/"+customer_email,
+        url: "/login",
         data: JSON.stringify(data),
         contentType: "application/json",
         dataType: 'json',
         success: function(result) {
+            //console.log(jQuery().jquery);
             message = result.message;
             //console.log(message);
             if(message == "Welcome"){

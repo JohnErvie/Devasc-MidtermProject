@@ -5,10 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static',filename='regpage.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Registration</title>
 </head>
 <body>
-    <form action="{{ url_for('createdAcc') }}" method="post">
+    
         <h2>Sign Up</h2>
             <p>
                   
@@ -19,12 +20,46 @@
                   <input id="Email" name="email_signup" type="text" placeholder="Email">
               </p>
               <p>
-                  <input id="password" name="password_signup" type="password" placeholder="Password">
+                  <input id="Password" name="password_signup" type="password" placeholder="Password">
                   <span>Enter a password longer than 8 characters</span>
-              </p>
+              </p><br><br><br>
+              <p><span style="color:red" id="error"></span></p>
               <p>
-                  <input type="submit" value="Create My Account" id="submit">
+                  <input type="submit" name="create" value="Create My Account" onclick="regSubmit();">
               </p>
-          </form>
+    
 </body>
 </html>
+<script>
+    function regSubmit(){
+        var message;
+        var customer_name = document.getElementById("Name").value;
+        var customer_email = document.getElementById("Email").value;
+        var customer_password = document.getElementById("Password").value;
+        var error = document.getElementById("error");
+
+        var data = [
+            {"name": customer_name,
+            "email": customer_email,
+            "password": customer_password}
+        ];
+
+        $.ajax({
+        type: "POST",
+        url: "/createdAcc",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        dataType: 'json',
+        success: function(result) {
+            message = result.message;
+            //console.log(message);
+            if(message == "Successfully Registered"){
+                window.location.href="/test";
+           }
+           else{
+            error.innerHTML = message;
+           }
+        } 
+        });   
+    }
+</script>

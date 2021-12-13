@@ -63,19 +63,17 @@ def home():
     else:
         return render_template('index.html', user=user)
 
-@webApp.route('/login/<customer_email>', methods=['GET', 'POST'])
-def login(customer_email):
+@webApp.route('/login', methods=['GET', 'POST'])
+def login():
     if request.method == 'POST':
         data = request.get_json()
-        email = customer_email
+        email = data[0]["email"]
         password = data[0]["password"]
 
         global user
         customer = Customer.query.filter_by(customer_email=email).first()
         user = customer_schema.dump(customer)
-        #print(user)
-        #print(result)
-        #customer_schema.jsonify(result)
+    
         message = ""
     
         if(len(user)>0):
@@ -111,14 +109,15 @@ def register():
     # show the form, it wasn't submitted
     return render_template('regpage.html')
 
-@webApp.route('/createdAcc/<customer_email>', methods=['GET', 'POST'])
-def createdAcc(customer_email):
+@webApp.route('/createdAcc', methods=['GET', 'POST'])
+def createdAcc():
     if request.method == 'POST':
         data = request.get_json()
         #print(data)
         
         customer_id = datetime.now().strftime("%Y%m%d%H%M%S")
         customer_name = data[0]['name']
+        customer_email = data[0]['email']
         customer_password = data[0]['password']
 
         check_email = Customer.query.filter_by(customer_email=customer_email).first()
@@ -221,7 +220,7 @@ def update_customer(customer_id):
 
                 message = {'message':"User Updated"}
 
-    return jsonify(message)
+        return jsonify(message)
     
 
 

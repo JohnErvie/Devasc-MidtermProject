@@ -50,7 +50,6 @@ def main():
 def test():
     global user
     if(user is None):
-        # show the form, it wasn't submitted
         return render_template('test.html')
     else:
         user = None
@@ -67,30 +66,31 @@ def home():
 @webApp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form["email_login"]
-        password = request.form["pass_login"]
+        data = request.get_json()
+        email = data[0]["email"]
+        password = data[0]["password"]
 
         global user
-        stmt = text("SELECT * FROM customer where customer_email=:email and customer_password=:password")
-        stmt = stmt.columns(Customer.customer_id, Customer.customer_name, Customer.customer_email, Customer.customer_password)
-        
-        customers = db.session.query(Customer).from_statement(stmt).params(email=email, password=password).all()
-        user = customers_schema.dump(customers)
-        #print(result)
-        #customer_schema.jsonify(result)
-        
-        if (user is None):
-            user = None
-            return redirect(url_for("test"))
+        customer = Customer.query.filter_by(customer_email=email).first()
+        user = customer_schema.dump(customer)
+    
+        message = ""
+    
+        if(len(user)>0):
+            if (user['customer_password'] == password):
+                #return redirect(url_for("home")) 
+                message = {'message':"Welcome"}
+
+            else:
+                user = None
+                message = {'message':"Incorrect Email or Password"}
+                #return redirect(url_for("test"))
         else:
-            if(len(user)>0):
-                if (user[0]['customer_email'] == email and user[0]['customer_password'] == password):
-                    return redirect(url_for("home")) 
-                else:
-                    user = None
-                    return redirect(url_for("test"))
+            user = None
+            message = {'message':"There is no email registered"}
+            #return redirect(url_for("test"))
         
-    return redirect(url_for("test"))
+    return jsonify(message)
 
 @webApp.route('/aboutus', methods=['GET', 'POST'])
 def aboutus():
@@ -112,23 +112,42 @@ def register():
 @webApp.route('/createdAcc', methods=['GET', 'POST'])
 def createdAcc():
     if request.method == 'POST':
-        customer_id = datetime.now().strftime("%Y%m%d%H%M%S")
-        customer_name = request.form["name_signup"]
-        customer_email = request.form['email_signup']
-        customer_password = request.form['password_signup']
-        new_customer = Customer(customer_id, customer_name, customer_email, customer_password)
-        db.session.add(new_customer)
-        db.session.commit()
+        data = request.get_json()
+        #print(data)
         
-        return redirect(url_for('test'))
+        customer_id = datetime.now().strftime("%Y%m%d%H%M%S")
+        customer_name = data[0]['name']
+        customer_email = data[0]['email']
+        customer_password = data[0]['password']
+
+        check_email = Customer.query.filter_by(customer_email=customer_email).first()
+        existing_email = customer_schema.dump(check_email)
+        #print(len(existing_email))
+        if len(existing_email) > 0:
+            message = {'message':"Email is already used"}
+
+        else:
+            new_customer = Customer(customer_id, customer_name, customer_email, customer_password)
+            db.session.add(new_customer)
+            db.session.commit()
+
+            message = {'message':"Successfully Registered"}
+        
+        return jsonify(message)
 
 @webApp.route('/customers', methods=['GET'])
 def customers():
-    customers = Customer.query.all()
-    result = customers_schema.dump(customers)
-    #print(result)
     global user
-    return render_template('customers.html', rows=result, user=user)
+    if(user is None):
+        return redirect(url_for("test"))
+    else:
+        customers = Customer.query.all()
+        result = customers_schema.dump(customers)
+        #print(result)
+        
+        return render_template('customers.html', rows=result, user=user)
+
+    
 
 @webApp.route('/customers/<customer_id>', methods=['GET'])
 def read_customer(customer_id):
@@ -158,9 +177,6 @@ def delete_customer(customer_id):
 @webApp.route('/update/<customer_id>', methods=['GET', 'PUT'])
 def updatePage(customer_id):
     global user
-    # show the form, it wasn't submitted
-    
-
     return render_template('updateCustomer.html', user=user)
 
 @webApp.route('/updated/<customer_id>', methods=['GET', 'PUT'])
@@ -168,27 +184,43 @@ def update_customer(customer_id):
     global user
     if request.method == 'PUT':
         customer = Customer.query.get(customer_id)
-        name = request.form['name_update']
-        email = request.form['email_update']
-        password = request.form['password_update']
+        data = request.get_json()
 
-        customer.customer_name = name
-        customer.customer_email = email
-        customer.customer_password = password
+        name = data[0]['name']
+        email = data[0]['email']
+        password = data[0]['password']
+
+        check_email = Customer.query.filter_by(customer_email=email).first()
+        existing_email = customer_schema.dump(check_email)
+
+        if user['customer_email'] == email:
+            customer.customer_name = name
+            customer.customer_email = email
+            customer.customer_password = password
 
 
-        db.session.commit()
+            db.session.commit()
 
-        customers = Customer.query.all()
-        result = customers_schema.dump(customers)
-        #print(result)
+            customers = Customer.query.all()
+            result = customers_schema.dump(customers)
 
-        return render_template('customers.html', rows=result, user=user)
+            message = {'message':"User Updated"}
+        else:
+            if len(existing_email) > 0:
+                message = {'message':"Email is already used"}
+            else:
+                customer.customer_name = name
+                customer.customer_email = email
+                customer.customer_password = password
 
-    elif request.method == 'GET':
-        return render_template('updateCustomer.html', user=user)
+                db.session.commit()
 
-    return render_template('updateCustomer.html', user=user)
+                customers = Customer.query.all()
+                result = customers_schema.dump(customers)
+
+                message = {'message':"User Updated"}
+
+        return jsonify(message)
     
 
 
