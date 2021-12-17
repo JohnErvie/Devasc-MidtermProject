@@ -62,7 +62,7 @@
 
         $.ajax({
         type: "POST",
-        url: "/login",
+        url: "http://0.0.0.0:8080/login",
         data: JSON.stringify(data),
         contentType: "application/json",
         dataType: 'json',
@@ -71,7 +71,7 @@
             message = result.message;
             //console.log(message);
             if(message == "Welcome"){
-                window.location.href="/home";
+                window.location.href="http://0.0.0.0:8080/home";
            }
            else{
             error.innerHTML = message;

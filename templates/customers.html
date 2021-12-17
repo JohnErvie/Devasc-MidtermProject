@@ -30,7 +30,7 @@
 
         {% endfor %}
     </table>
-    <a href="/home"><button type="button" class="button">Go Home</button></a>
+    <a href="http://0.0.0.0:8080/home"><button type="button" class="button">Go Home</button></a>
 </body>
 </center>
 </html>
@@ -39,10 +39,10 @@
         // Selecting the input element and get its value 
         var inputVal = document.getElementById("customer_id").value;
         if (inputVal.length > 0) {
-            window.location.href="/customers/"+inputVal;
+            window.location.href="http://0.0.0.0:8080/customers/"+inputVal;
         }
         else{
-            window.location.href="/customers";
+            window.location.href="http://0.0.0.0:8080/customers";
         }
         
         // Displaying the value
@@ -53,10 +53,10 @@
         var cusIdVal = document.getElementById("customer_id").value;
         if (cusIdVal.length > 0) {
             fetch("/customers/delete/"+cusIdVal, {method: 'delete'}).then(response => response.json());
-            window.location.href="/customers";
+            window.location.href="http://0.0.0.0:8080/customers";
         }
         else{
-            window.location.href="/customers";
+            window.location.href="http://0.0.0.0:8080/customers";
         }
     }
 </script>

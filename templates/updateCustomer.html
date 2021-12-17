@@ -22,8 +22,8 @@
         <br><br><br>
         <p><span style="color:red" id="error"></span></p>
         <button type="button" onclick="updateCustomer();" class="button">Update</button><br>
-        <a href="/test"> <button type="button" >Logout</button><br></a>
-        <a href="/customers"> <button type="button" >Go to Customer</button><br></a>
+        <a href="http://0.0.0.0:8080/test"> <button type="button" >Logout</button><br></a>
+        <a href="http://0.0.0.0:8080/customers"> <button type="button" >Go to Customer</button><br></a>
 
 </body>
 </center>
@@ -45,7 +45,7 @@
 
         $.ajax({
         type: "PUT",
-        url: "/updated/"+update_userid,
+        url: "http://0.0.0.0:8080/updated/"+update_userid,
         data: JSON.stringify(data),
         contentType: "application/json",
         dataType: 'json',
@@ -53,7 +53,7 @@
             message = result.message;
             //console.log(message);
             if(message == "User Updated"){
-                window.location.href="/test";
+                window.location.href="http://0.0.0.0:8080/test";
            }
            else{
             error.innerHTML = message;

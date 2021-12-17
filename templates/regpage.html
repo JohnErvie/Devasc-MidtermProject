@@ -46,7 +46,7 @@
 
         $.ajax({
         type: "POST",
-        url: "/createdAcc",
+        url: "http://0.0.0.0:8080/createdAcc",
         data: JSON.stringify(data),
         contentType: "application/json",
         dataType: 'json',
@@ -54,7 +54,7 @@
             message = result.message;
             //console.log(message);
             if(message == "Successfully Registered"){
-                window.location.href="/test";
+                window.location.href="http://0.0.0.0:8080/test";
            }
            else{
             error.innerHTML = message;
