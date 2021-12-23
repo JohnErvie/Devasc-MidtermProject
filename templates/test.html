@@ -9,44 +9,48 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='test1.css') }}">
 </head>
 <body>
-    <h2>Login Form</h2>
-    <div class="navbar">
-        <div class="bitconnect">
-            <nav>
-                <ul class="primary-nav">
+<section class="header">
+    <nav>
+        <div class="nav-links">
+            <ul>
+                <li><a href="#"> <button>Device Description</button> </a></li>
+                <li><a href="{{ url_for('aboutus') }}"> <button>About Us</button> </a></li>
+            </ul>
+        </div>
+    </nav>
 
-                    <li><a href="#"><button type="button" class="botton">Device Description</a></li>
-                    <li><a href="{{ url_for('aboutus') }}"><button type="button" class="botton">About Us</a></li>
-                </ul>
-            </nav>
+
+<div class="login-form">
+    <div class="container" id="container">
+        <div class="form-container sign-in-container">
+            
+                <h1>Sign in</h1>
+                <br>
+                <br>
+                <input type="email" name="email_login" id="Email" placeholder="Email" />
+                <br>
+                <br>
+                <input type="password" name="pass_login" id="Password" placeholder="Password" />
+                <br>
+                <br>
+                <span style="color:red" id="error"></span>
+                <br><br><br>
+                <a href="#">Forgot your password?</a>
+                <br>
+                <br>
+                <button id="btn_signin" onclick="loginSumit();">Sign In</button>
+                <br>
+                <br>
+                <a href="{{ url_for('register') }}" class="button"><button>
+                    Sign Up</button>
+                </a>
+            
         </div>
     </div>
-<div class="container" id="container">
-    <div class="form-container sign-in-container">
-        
-            <h1>Sign in</h1>
-            <br>
-            <br>
-            <input type="email" name="email_login" id="Email" placeholder="Email" />
-            <br>
-            <br>
-            <input type="password" name="pass_login" id="Password" placeholder="Password" />
-            <br>
-            <br>
-            <span style="color:red" id="error"></span>
-            <br><br><br>
-            <a href="#">Forgot your password?</a>
-            <br>
-            <br>
-            <button id="btn_signin" onclick="loginSumit();">Sign In</button>
-            <br>
-            <br>
-            <a href="{{ url_for('register') }}" class="button"><button>
-                Sign Up</button>
-            </a>
-        
-    </div>
 </div>
+</section>
+
+</body>
 </html>
 <script>
     function loginSumit(){
