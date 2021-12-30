@@ -25,9 +25,12 @@
     <b>Password</b>
     <input type="password" name="password_update" id="password_update" placeholder="Password" /><br><br>
     <p><span style="color:red" id="error"></span></p>
-    <button type="button" onclick="updateCustomer();" class="button1">Update</button><br>
-    <a href="http://0.0.0.0:8080/test"> <button type="button" class="button2">Logout</button><br></a>
-    <a href="http://0.0.0.0:8080/customers"> <button type="button" class="button3">Go to Customer</button><br></a>
+    <div class="buttons">
+        <button type="button" onclick="updateCustomer();" class="button1" >Update</button><br>
+        <br><br>
+        <a href="http://0.0.0.0:8080/customers" style="text-decoration: none;"> <button type="button" class="button3">Go to Customers</button></a>
+        <a href="http://0.0.0.0:8080/test" style="text-decoration: none;"> <button type="button" class="button2">Logout</button><br></a>
+    </div>
     <br><br>
 </div>
 </section>
