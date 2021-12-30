@@ -1,4 +1,20 @@
 @import "compass/css3";
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.header {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #333;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+}
 
 body {
   background: #384047;
@@ -69,9 +85,19 @@ input[type="submit"]:hover {
     background: rgba(148,175,101,1);
     text-shadow:0 1px 3px darken($button, 30%);
   }
-input[type="submit"]:hover {
+
+a {
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
+    display: inline-block;
+    text-align: center;
+    margin-left: 30%;
+    overflow: visible;
     
-  }
+}
+
 label{
     position: absolute;
     left: 8px;
