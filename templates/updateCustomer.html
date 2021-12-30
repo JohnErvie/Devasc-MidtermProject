@@ -25,6 +25,7 @@
     <b>Password</b>
     <input type="password" name="password_update" id="password_update" placeholder="Password" /><br><br>
     <p><span style="color:red" id="error"></span></p>
+    <br>
     <div class="buttons">
         <button type="button" onclick="updateCustomer();" class="button1" >Update</button><br>
         <br><br>
@@ -40,35 +41,40 @@
 
 <script>
     function updateCustomer(){
-        var update_userid = '{{ user["customer_id"] }}';
-        var customer_name = document.getElementById("name_update").value;
-        var customer_email = document.getElementById("email_update").value;
-        var customer_password = document.getElementById("password_update").value;
-        var error = document.getElementById("error");
+        if (confirm("You are automatically logging out. Do you want to continue?")) {
+            var update_userid = '{{ user["customer_id"] }}';
+            var customer_name = document.getElementById("name_update").value;
+            var customer_email = document.getElementById("email_update").value;
+            var customer_password = document.getElementById("password_update").value;
+            var error = document.getElementById("error");
 
-        var data = [
-            {"name": customer_name,
-            "email": customer_email,
-            "password": customer_password}
-        ];
+            var data = [
+                {"name": customer_name,
+                "email": customer_email,
+                "password": customer_password}
+            ];
 
-        $.ajax({
-        type: "PUT",
-        url: "http://0.0.0.0:8080/updated/"+update_userid,
-        data: JSON.stringify(data),
-        contentType: "application/json",
-        dataType: 'json',
-        success: function(result) {
-            message = result.message;
-            //console.log(message);
-            if(message == "User Updated"){
-                window.location.href="http://0.0.0.0:8080/test";
-           }
-           else{
-            error.innerHTML = message;
-           }
-        } 
-        });   
+            $.ajax({
+            type: "PUT",
+            url: "http://0.0.0.0:8080/updated/"+update_userid,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json',
+            success: function(result) {
+                message = result.message;
+                //console.log(message);
+                if(message == "User Updated"){
+                    window.location.href="http://0.0.0.0:8080/test";
+            }
+            else{
+                error.innerHTML = message;
+            }
+            } 
+            });
+
+        }
+
+           
     }
 
 

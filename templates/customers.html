@@ -7,32 +7,48 @@
     <title>Members</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='customer.css') }}">
 </head>
-<center><body>
+
+<body>
+<section class="header">
+    <h1>Members</h1>
     <input type="number" name="customer_id" id="customer_id" placeholder="Customer ID" />
     <button type="button" onclick="searchCustomer();" class="button">Search</button>
     <button type="button" onclick="deleteCustomer();" class="button">Delete</button>
+        
+
+    <div class="customer-table">
+        
+        <br>
+        <br>
+        <table border="1" class="tabol">
+            <thead class="Thead">
+                <td>ID</td>
+                <td>Name</td>
+                <td>Email</td>
+            </thead>
+
+            {% for row in rows %}
+            <tr>
+                <td class="cus-id">{{row['customer_id']}}</td>
+                <td class="cus-name">{{row['customer_name']}}</td>
+                <td class="cus-email">{{row['customer_email']}}</td>
+                
+                
+            </tr>
+
+            {% endfor %}
+        </table>
+
+        <br>
+        <a href="http://0.0.0.0:8080/home" style="text-decoration: none;"><button type="button" class="button">Go Home</button></a>
+
+    </div>
     
-    <br>
-    <br>
-    <table border="1" class="tabol">
-        <thead class="Thead">
-            <td>ID</td>
-            <td>Name</td>
-            <td>Email</td>
-        </thead>
 
-        {% for row in rows %}
-        <tr>
-            <td>{{row['customer_id']}}</td>
-            <td>{{row['customer_name']}}</td>
-            <td>{{row['customer_email']}}</td>
-        </tr>
-
-        {% endfor %}
-    </table>
-    <a href="http://0.0.0.0:8080/home"><button type="button" class="button">Go Home</button></a>
+</section>
+    
 </body>
-</center>
+
 </html>
 <script>
     function searchCustomer(){
