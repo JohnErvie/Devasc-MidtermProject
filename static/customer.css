@@ -27,3 +27,11 @@ table, thead, td, tr {
 	border-style: solid;
 	width: 100%
 }
+
+input[type=number] {
+	background-color: white;
+	background-image: url('images/search.png');
+	background-position: 10px 10px;
+	background-repeat: no-repeat;
+	padding-left: 40px;
+}
